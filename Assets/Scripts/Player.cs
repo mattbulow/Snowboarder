@@ -4,28 +4,31 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     // components
-    private Rigidbody2D rigidbody2D;
+    private Rigidbody2D rigidBody2D;
     // child objects/components
     [SerializeField] private ParticleSystem crashEffect;
+    [SerializeField] private ParticleSystem snowEffect;
 
-    // Player physics settings
+    // other game objects and components
+    [SerializeField] private Ground groundScript;
+
+    // Player variables settings
     [SerializeField] private float torqueForce = 3f;
-    [SerializeField] private float linearForce = 50f;
-
+    [SerializeField] private float linearForceAdder = 5f;
     [SerializeField] private float crashReloadDelay = 0.5f;
 
 
-    private void Start()
+    void Start()
     {
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        if (rigidbody2D == null ) { Debug.LogError("rigidbody2D is NULL"); }
+        rigidBody2D = GetComponent<Rigidbody2D>();
+        if (rigidBody2D == null ) { Debug.LogError("rigidbody2D is NULL"); }
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        rigidbody2D.AddTorque(Input.GetAxis("Vertical") * torqueForce);
+        rigidBody2D.AddTorque(-Input.GetAxis("Vertical") * torqueForce);
 
     }
 
@@ -35,9 +38,17 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             Debug.Log("Player is colliding with Ground");
-            float playerAngle_rad = Mathf.Deg2Rad * this.transform.eulerAngles.z;
-            rigidbody2D.AddForce(new Vector2(Mathf.Cos(playerAngle_rad), Mathf.Sin(playerAngle_rad)) * linearForce * Input.GetAxis("Horizontal"));
+            groundScript.addToBaseEffectorSpeed(linearForceAdder * Input.GetAxis("Horizontal"));
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        snowEffect.Play();
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        snowEffect.Stop();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
