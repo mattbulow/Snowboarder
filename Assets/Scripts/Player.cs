@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Ground groundScript;
 
     // Player variables settings
-    [SerializeField] private float torqueForce = 3f;
+    [SerializeField] private float torqueForce = 750f;
     [SerializeField] private float linearForceAdder = 5f;
     [SerializeField] private float crashReloadDelay = 0.5f;
 
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         // control rotation of snowboarder
-        rigidBody2D.AddTorque(-Input.GetAxis("Vertical") * torqueForce);
+        rigidBody2D.AddTorque(-Input.GetAxis("Vertical") * torqueForce*Time.deltaTime);
 
     }
 
