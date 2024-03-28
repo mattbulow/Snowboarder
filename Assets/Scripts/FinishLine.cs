@@ -5,6 +5,13 @@ public class FinishLine : MonoBehaviour
 {
     [SerializeField] private float crashReloadDelay = 1f;
     [SerializeField] private ParticleSystem finishEffect;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) { Debug.LogError("audioSource is NULL"); }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -12,6 +19,7 @@ public class FinishLine : MonoBehaviour
         {
             Debug.Log("You reached the finish line!");
             finishEffect.Play();
+            audioSource.Play();
             Invoke("ReloadScene", crashReloadDelay);
         }
     }

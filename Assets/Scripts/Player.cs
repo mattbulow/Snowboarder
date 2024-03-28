@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     // components
     private Rigidbody2D rigidBody2D;
+    private AudioSource audioSource;
     // child objects/components
     [SerializeField] private ParticleSystem crashEffect;
     [SerializeField] private ParticleSystem snowEffect;
@@ -22,12 +23,14 @@ public class Player : MonoBehaviour
     {
         rigidBody2D = GetComponent<Rigidbody2D>();
         if (rigidBody2D == null ) { Debug.LogError("rigidbody2D is NULL"); }
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) { Debug.LogError("audioSource is NULL"); }
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        // control rotation of snowboarder
         rigidBody2D.AddTorque(-Input.GetAxis("Vertical") * torqueForce);
 
     }
@@ -35,6 +38,7 @@ public class Player : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         Debug.Log("Player is colliding with something");
+        // boost when pressing horizontal keys and when touching ground 
         if (collision.gameObject.CompareTag("Ground"))
         {
             Debug.Log("Player is colliding with Ground");
@@ -58,6 +62,7 @@ public class Player : MonoBehaviour
             Debug.Log("Player hit head on ground!");
             Invoke("ReloadScene", crashReloadDelay);
             crashEffect.Play();
+            audioSource.Play();
         }
     }
 

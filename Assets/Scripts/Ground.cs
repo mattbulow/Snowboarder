@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Ground : MonoBehaviour
 {
-    [SerializeField] private float effectorBaseSpeed = 8f;
+    private float effectorBaseSpeed = 8f;
     private SurfaceEffector2D effector;
 
     private void Start()
     {
         effector = GetComponent<SurfaceEffector2D>();
         if (effector == null ) { Debug.LogError("effector is NULL"); }
+        effectorBaseSpeed = effector.speed;
     }
 
     public void addToBaseEffectorSpeed(float amount)
